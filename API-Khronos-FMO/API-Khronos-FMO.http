@@ -1,0 +1,6 @@
+@API_Khronos_FMO_HostAddress = http://localhost:5072
+
+GET {{API_Khronos_FMO_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

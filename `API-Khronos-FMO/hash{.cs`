@@ -1,0 +1,18 @@
+using Microsoft.AspNetCore.Identity;
+
+namespace API_Khronos_FMO;
+
+public static class Hash
+{
+	public static void Main()
+	{
+		var hasher = new PasswordHasher<string>();
+
+		const string carnet = "A001";
+		const string clave = "Admin123!";
+
+		string hash = hasher.HashPassword(carnet, clave);
+
+		Console.WriteLine(hash);
+	}
+}

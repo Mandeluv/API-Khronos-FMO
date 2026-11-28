@@ -1,12 +1,13 @@
 
+using API_Khronos_FMO.Data;
+using API_Khronos_FMO.Services;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
-using API_Khronos_FMO.Data;
 using Npgsql;
-using API_Khronos_FMO.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +102,25 @@ builder.Services.AddOpenApi(options =>
 });
 
 var app = builder.Build();
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        var (statusCode, mensaje) = exception switch
+        {
+            ArgumentException => (StatusCodes.Status400BadRequest, exception.Message),
+            InvalidOperationException => (StatusCodes.Status409Conflict, exception.Message),
+            _ => (StatusCodes.Status500InternalServerError, "Ocurrió un error interno en el servidor.")
+        };
+
+        context.Response.StatusCode = statusCode;
+        context.Response.ContentType = "application/json";
+        await context.Response.WriteAsJsonAsync(new { mensaje });
+    });
+});
 
 // Restablecimiento local de contraseña
 if (args.Contains("--restablecer-clave"))

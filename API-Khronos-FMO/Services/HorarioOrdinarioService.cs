@@ -73,10 +73,10 @@ namespace API_Khronos_FMO.Services
 
 
                 comando.Parameters.AddWithValue(
-                    "hora_inicio", horario.HoraInicio);
+                    "hora_inicio", NpgsqlDbType.Time, horario.HoraInicio);
 
                 comando.Parameters.AddWithValue(
-                    "hora_finalizacion", horario.HoraFinalizacion);
+                    "hora_finalizacion", NpgsqlDbType.Time, horario.HoraFinalizacion);
 
                 comando.Parameters.AddWithValue(
                     "fecha_inicio", horario.FechaInicioVigencia);
